@@ -22,6 +22,8 @@ public class Fahrtenbuch extends javax.swing.JFrame {
     /**
      * Creates new form Fahrtenbuch
      */
+    boolean OhneFilter=true;
+    FahrtenbuchDLG dlg;
     TabellenModell modelOhneFilter=new TabellenModell();
     TabellenModell modelMitFilter=new TabellenModell();
     public Fahrtenbuch() {
@@ -38,6 +40,9 @@ public class Fahrtenbuch extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        btAdd = new javax.swing.JMenuItem();
+        btRemove = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         tfKmvon = new javax.swing.JTextField();
@@ -48,6 +53,22 @@ public class Fahrtenbuch extends javax.swing.JFrame {
         btMitFilter = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbAusgabe = new javax.swing.JTable();
+
+        btAdd.setText("Add");
+        btAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onAdd(evt);
+            }
+        });
+        jPopupMenu1.add(btAdd);
+
+        btRemove.setText("Remove");
+        btRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onRemove(evt);
+            }
+        });
+        jPopupMenu1.add(btRemove);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -99,6 +120,7 @@ public class Fahrtenbuch extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbAusgabe.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(tbAusgabe);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -143,6 +165,7 @@ public class Fahrtenbuch extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         tbAusgabe.setModel(modelOhneFilter);
+        OhneFilter=true;
     }//GEN-LAST:event_onOhneFilter
 
     private void onMitFilter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onMitFilter
@@ -156,14 +179,37 @@ public class Fahrtenbuch extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         tbAusgabe.setModel(modelMitFilter);
+        OhneFilter=false;
         try {
             modelMitFilter.filter(Integer.parseInt(tfKmvon.getText()), Integer.parseInt(tfKmbis.getText()));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Bitte geben sie eine Gültige Zahl bei den Kilometerangaben ein");
+        }catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        
-        
     }//GEN-LAST:event_onMitFilter
+
+    private void onAdd(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdd
+        dlg=new FahrtenbuchDLG(this, true);
+        dlg.setVisible(true);
+        if(!OhneFilter){
+            modelMitFilter.add(dlg.getNewFahrt());
+            modelMitFilter.filter(Integer.parseInt(tfKmvon.getText()), Integer.parseInt(tfKmbis.getText()));
+        }
+        else{
+            modelOhneFilter.add(dlg.getNewFahrt());
+        }
+    }//GEN-LAST:event_onAdd
+
+    private void onRemove(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onRemove
+        if(OhneFilter){
+            modelOhneFilter.remove(tbAusgabe.getSelectedRow());
+        }
+        else{
+            modelMitFilter.remove(tbAusgabe.getSelectedRow());
+        }
+        
+    }//GEN-LAST:event_onRemove
 
     /**
      * @param args the command line arguments
@@ -201,12 +247,15 @@ public class Fahrtenbuch extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btAdd;
     private javax.swing.JButton btMitFilter;
     private javax.swing.JButton btOhneFilter;
+    private javax.swing.JMenuItem btRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbAusgabe;
     private javax.swing.JTextField tfKmbis;

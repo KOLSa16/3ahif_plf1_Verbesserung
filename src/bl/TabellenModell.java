@@ -59,7 +59,14 @@ public class TabellenModell extends AbstractTableModel{
         }
         return false;
     }
-
+    public void add(Fahrt f){
+        list.add(f);
+        fireTableDataChanged();
+    }
+    public void remove(int i){
+        list.remove(i);
+        fireTableDataChanged();
+    }
     public List<Fahrt> getList() {
         return list;
     }
