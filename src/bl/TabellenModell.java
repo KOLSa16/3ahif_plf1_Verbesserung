@@ -85,7 +85,7 @@ public class TabellenModell extends AbstractTableModel{
         List<Fahrt> l=new ArrayList();
         System.out.println(lower+"   "+higher);
         for(Fahrt f:list){
-            if(f.getKm()<=higher&&f.getKm()>=lower){
+            if(f.getKm()<higher&&f.getKm()>lower){
                 l.add(f);
                 System.out.println(f.getKm());
             }
